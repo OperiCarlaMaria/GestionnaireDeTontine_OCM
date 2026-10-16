@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ROLES, Role, libelleRole } from '../../../core/models/role';
 import { User } from '../../../core/models/user';
 import { AuthService, LONGUEUR_MIN_MOT_DE_PASSE } from '../../../core/services/auth.service';

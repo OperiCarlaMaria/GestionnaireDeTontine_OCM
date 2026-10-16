@@ -6,15 +6,55 @@
       <span class="badge badge--{{ membre.role.toLowerCase() }}">{{ libelleRole(membre.role) }}</span>
     </p>
 
-    <h2>Modules de gestion</h2>
-    <div class="grille">
-      @for (module of modules; track module.titre) {
-        <article class="carte module">
-          <h3>{{ module.titre }}</h3>
-          <p>{{ module.description }}</p>
-          <span class="module__etat">Bientôt disponible</span>
-        </article>
-      }
-    </div>
+    @if (estAdministrateur()) {
+      <p class="accueil__role__sous">Espace Administrateur · Configuration et gestion du personnel</p>
+      <div class="grille">
+        @for (module of modules; track module.titre) {
+          <article class="carte module">
+            <h3>{{ module.titre }}</h3>
+            <p>{{ module.description }}</p>
+            <div class="module__actions">
+              @for (action of module.actions; track action.label) {
+                <a class="bouton bouton--secondaire" [routerLink]="action.cible">{{ action.label }}</a>
+              }
+            </div>
+            <span class="module__etat">{{ module.etat }}</span>
+          </article>
+        }
+      </div>
+    } @else if (estTresorier()) {
+      <p class="accueil__role__sous">Espace Trésorier · Suivi financier et cotisations</p>
+      <div class="grille">
+        @for (module of modules; track module.titre) {
+          <article class="carte module">
+            <h3>{{ module.titre }}</h3>
+            <p>{{ module.description }}</p>
+            <div class="module__actions">
+              @for (action of module.actions; track action.label) {
+                <a class="bouton bouton--secondaire" [routerLink]="action.cible">{{ action.label }}</a>
+              }
+            </div>
+            <span class="module__etat">{{ module.etat }}</span>
+          </article>
+        }
+      </div>
+    } @else {
+      <p class="accueil__role__sous">Espace Membre · Votre espace personnel</p>
+      <div class="grille">
+        @for (module of modules; track module.titre) {
+          <article class="carte module">
+            <h3>{{ module.titre }}</h3>
+            <p>{{ module.description }}</p>
+            <div class="module__actions">
+              @for (action of module.actions; track action.label) {
+                <a class="bouton bouton--secondaire" [routerLink]="action.cible">{{ action.label }}</a>
+              }
+            </div>
+            <span class="module__etat">{{ module.etat }}</span>
+          </article>
+        }
+      </div>
+    }
   </section>
 }
+

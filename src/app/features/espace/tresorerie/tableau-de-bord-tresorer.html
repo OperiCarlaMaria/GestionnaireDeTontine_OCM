@@ -1,0 +1,137 @@
+﻿<section class="tableau-de-bord">
+  <h1>Tableau de bord trésorerie</h1>
+  <p class="soustitre">
+    Suivi financier · {{ configuration().nom }} ·
+    @if (estAdministrateur()) {
+      Admin
+    } @else {
+      Trésorier
+    }
+  </p>
+
+  <!-- Alertes -->
+  @if (statistiques().cotisationsEnRetard > 0) {
+    <section class="alertes">
+      <div class="carte carte--alerte">
+        <span class="icone">⚠️</span>
+        <div>
+          <h3>{{ statistiques().cotisationsEnRetard }} cotisations en retard</h3>
+          <p class="description">
+            Des cotisations sont en retard. Action nécessaire pour éviter les désistements.
+          </p>
+        </div>
+        <button class="bouton bouton--secondaire" (click)="voirAlertes()">
+          Voir les alertes →
+        </button>
+      </div>
+    </section>
+  }
+
+  <!-- Statistiques -->
+  <section class="cartes">
+    <article class="carte">
+      <span class="etiquette">Cotisations collectées</span>
+      <span class="valeur">{{ statistiques().cotisationsCollectees | number:'1.0-0' }} FCFA</span>
+      <span class="detail">{{ statistiques().cotisationsEnAttente }} en attente · {{ statistiques().cotisationsEnRetard }} en retard</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Versements effectués</span>
+      <span class="valeur">{{ statistiques().montantVersementsEffectues | number:'1.0-0' }} FCFA</span>
+      <span class="detail">{{ statistiques().versementsEffectues }} versements effectués</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Solde disponible</span>
+      <span class="valeur">{{ statistiques().soldeDispo | number:'1.0-0' }} FCFA</span>
+      <span class="detail">Solde de la tontine</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Retard moyen</span>
+      <span class="valeur">{{ statistiques().cotisationsEnRetard > 0 ? 'À surveiller' : 'Aucun' }}</span>
+      <span class="detail">Cotisations en retard</span>
+    </article>
+  </section>
+
+  <!-- Graphique mensuel -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Évolution mensuelle</h2>
+      <p class="description">Cotisations collectées vs versements effectués (FCFA)</p>
+
+      <div class="graphique-boucle">
+        @for (item of statistiques().donneesMensuelles; track item.mois) {
+          <div class="point-boucle" [style.width.%]="100 / statistiques().donneesMensuelles.length">
+            <span class="etiquette-mois">{{ item.mois }}</span>
+            <div class="barres">
+              <div class="barre barre-cotisations" [style.height.%]="(item.cotisationsCollectees / (statistiques().cotisationsCollectees + statistiques().montantVersementsEffectues + 1)) * 100"></div>
+              <div class="barre barre-versements" [style.height.%]="(item.versementsEffectues / (statistiques().cotisationsCollectees + statistiques().montantVersementsEffectues + 1)) * 100"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="legende">
+        <span class="legende-item">
+          <span class="barre-cotisations"></span>
+          Cotisations
+        </span>
+        <span class="legende-item">
+          <span class="barre-versements"></span>
+          Versements
+        </span>
+      </div>
+    </article>
+  </section>
+
+  <!-- Gestion des versements -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Versements</h2>
+      <p class="description">Liste des versements effectués ou en attente.</p>
+      <div class="tablette">
+        <div class="colonne"><label>Membre</label><p>—</p></div>
+        <div class="colonne"><label>Montant</label><p>— FCFA</p></div>
+        <div class="colonne"><label>Date</label><p>—</p></div>
+        <div class="colonne"><label>Statut</label><span class="badge">En attente</span></div>
+        <div class="colonne"><label>Actions</label><button class="bouton bouton--petit">Valider</button></div>
+      </div>
+    </article>
+  </section>
+
+  <!-- Alertes -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Alertes</h2>
+      <p class="description">Notifications importantes pour le bon fonctionnement de la tontine.</p>
+      <div class="alertes-liste">
+        @if (statistiques().cotisationsEnRetard > 0) {
+          <div class="alerte">
+            <span class="icone">⚠️</span>
+            <div><strong>{{ statistiques().cotisationsEnRetard }} cotisation(s) en retard</strong><p>Vérifiez les cotisations des membres.</p></div>
+          </div>
+        } @else {
+          <div class="alerte alerte--ok">
+            <span class="icone">✅</span>
+            <div><strong>Aucune alerte</strong><p>Toutes les cotisations sont à jour.</p></div>
+          </div>
+        }
+      </div>
+    </article>
+  </section>
+
+  <!-- Gestionnaire de cotisations -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Gestionnaire de cotisations</h2>
+      <p class="description">Ajouter ou modifier manuellement une cotisation.</p>
+      <form class="formulaire" (ngSubmit)="noterManuel()">
+        <div class="champ"><label for="membre">Membre</label><select id="membre" name="membre" required><option value="">Sélectionner...</option></select></div>
+        <div class="champ"><label for="montant">Montant (FCFA)</label><input id="montant" type="number" min="1" name="montant" required /></div>
+        <div class="champ"><label for="etat">Statut</label><select id="etat" name="etat" required><option value="EN_ATTENTE">En attente</option><option value="COLLECTEE">Collectée</option></select></div>
+        <div class="boutons"><button type="submit" class="bouton bouton--primaire">Enregistrer</button></div>
+      </form>
+    </article>
+  </section>
+</section>

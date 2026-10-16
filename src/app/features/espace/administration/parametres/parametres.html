@@ -1,0 +1,123 @@
+<section class="parametres">
+  <header class="entete-section">
+    <h1>Paramètres de la tontine</h1>
+    <p>
+      Réglez le nom, la cotisation et le calendrier de la tontine. Ces valeurs alimentent les
+      cotisations, les tours de bénéficiaires et les rappels.
+    </p>
+  </header>
+
+  @if (messageErreur(); as erreur) {
+    <p class="message message--erreur" role="alert">{{ erreur }}</p>
+  }
+  @if (messageSucces(); as succes) {
+    <p class="message message--succes" role="status">{{ succes }}</p>
+  }
+
+  <div class="carte">
+    <form [formGroup]="formulaire" (ngSubmit)="valider()" novalidate>
+      <div class="grille">
+        <div class="champ">
+          <label for="nom">Nom de la tontine</label>
+          <input
+            id="nom"
+            type="text"
+            formControlName="nom"
+            autocomplete="organization"
+            [class.est-invalide]="formulaire.controls.nom.touched && formulaire.controls.nom.invalid"
+          />
+          @if (formulaire.controls.nom.touched && formulaire.controls.nom.invalid) {
+            <span class="message-erreur">Le nom de la tontine est obligatoire.</span>
+          }
+        </div>
+
+        <div class="champ">
+          <label for="montantCotisation">Montant de la cotisation</label>
+          <input
+            id="montantCotisation"
+            type="number"
+            min="1"
+            formControlName="montantCotisation"
+            [class.est-invalide]="
+              formulaire.controls.montantCotisation.touched &&
+              formulaire.controls.montantCotisation.invalid
+            "
+          />
+          @if (
+            formulaire.controls.montantCotisation.touched &&
+            formulaire.controls.montantCotisation.hasError('required')
+          ) {
+            <span class="message-erreur">Le montant est obligatoire.</span>
+          }
+          @if (
+            formulaire.controls.montantCotisation.touched &&
+            formulaire.controls.montantCotisation.hasError('min')
+          ) {
+            <span class="message-erreur">Le montant doit être supérieur à 0.</span>
+          }
+        </div>
+
+        <div class="champ">
+          <label for="frequence">Fréquence</label>
+          <select id="frequence" formControlName="frequence" (change)="changerFrequence()">
+            @for (frequence of frequences; track frequence) {
+              <option [value]="frequence">{{ libelleFrequence(frequence) }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="champ">
+          <label for="jourEcheance">
+            Jour d'échéance
+            @if (frequenceCourante === 'HEBDOMADAIRE') {
+              <span class="aide">(1 = lundi … 7 = dimanche)</span>
+            } @else {
+              <span class="aide">(jour du mois)</span>
+            }
+          </label>
+          <input
+            id="jourEcheance"
+            type="number"
+            formControlName="jourEcheance"
+            [attr.min]="bornes.min"
+            [attr.max]="bornes.max"
+            [class.est-invalide]="
+              formulaire.controls.jourEcheance.touched && formulaire.controls.jourEcheance.invalid
+            "
+          />
+          @if (
+            formulaire.controls.jourEcheance.touched &&
+            formulaire.controls.jourEcheance.hasError('required')
+          ) {
+            <span class="message-erreur">Le jour d'échéance est obligatoire.</span>
+          }
+          @if (
+            formulaire.controls.jourEcheance.touched &&
+            (formulaire.controls.jourEcheance.hasError('min') ||
+              formulaire.controls.jourEcheance.hasError('max'))
+          ) {
+            <span class="message-erreur">
+              Le jour d'échéance doit être compris entre {{ bornes.min }} et {{ bornes.max }}.
+            </span>
+          }
+        </div>
+
+        <div class="champ">
+          <label for="ordreTours">Ordre des tours de bénéficiaires</label>
+          <select id="ordreTours" formControlName="ordreTours">
+            @for (ordre of ordres; track ordre) {
+              <option [value]="ordre">{{ libelleOrdre(ordre) }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="boutons">
+        <button type="submit" class="bouton bouton--primaire">Enregistrer</button>
+        <a class="bouton bouton--secondaire" routerLink="/espace/administration">
+          Retour à l'administration
+        </a>
+      </div>
+    </form>
+  </div>
+</section>

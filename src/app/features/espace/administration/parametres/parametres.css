@@ -1,0 +1,29 @@
+:host {
+  display: block;
+}
+
+.entete-section p {
+  color: var(--couleur-texte-doux);
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0 var(--espace-4);
+}
+
+.aide {
+  color: var(--couleur-texte-doux);
+  font-weight: 400;
+}
+
+.boutons {
+  display: flex;
+  gap: var(--espace-3);
+  flex-wrap: wrap;
+  margin-top: var(--espace-4);
+}
+
+.boutons a.bouton:hover {
+  text-decoration: none;
+}

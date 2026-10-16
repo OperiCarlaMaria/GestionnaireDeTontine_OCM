@@ -1,0 +1,148 @@
+<section class="tableau-de-bord">
+  <h1>Tableau de bord administration</h1>
+  <p class="soustitre">
+    Vue d'ensemble du service tontine · {{ configuration().nom }} ·
+    @if (authRole() === 'ADMIN') {
+      Admin
+    } @else {
+      {{ libelleRole(authRole() ?? 'MEMBRE') }}
+    }
+  </p>
+
+  <!-- Statistiques -->
+  <section class="cartes">
+    <article class="carte">
+      <span class="etiquette">Membres</span>
+      <span class="valeur">{{ statistiques().membresTotal }}</span>
+      <span class="detail">{{ statistiques().membresActifs }} actifs · {{ statistiques().membresInactifs }} inactifs</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Cotisations collectées</span>
+      <span class="valeur">{{ statistiques().cotisationsCollectees | number:'1.0-0' }} FCFA</span>
+      <span class="detail">{{ statistiques().cotisationsEnAttente }} en attente · {{ statistiques().cotisationsEnRetard }} en retard</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Versements effectués</span>
+      <span class="valeur">{{ statistiques().montantVersementsEffectues | number:'1.0-0' }} FCFA</span>
+      <span class="detail">{{ statistiques().versementsEffectues }} versements effectués</span>
+    </article>
+
+    <article class="carte">
+      <span class="etiquette">Solde disponible</span>
+      <span class="valeur">{{ statistiques().soldeDispo | number:'1.0-0' }} FCFA</span>
+      <span class="detail">{{ statistiques().membresTotal }} membres actifs</span>
+    </article>
+  </section>
+
+  <!-- Graphique mensuel -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Évolution des cotisations</h2>
+      <p class="description">Cotisations collectées vs versements effectués sur les 6 derniers mois (FCFA)</p>
+
+      <div class="graphique-boucle">
+        @for (item of statistiques().donneesMensuelles; track item.mois; let i = $index) {
+          <div class="point-boucle" [style.width.%]="100 / statistiques().donneesMensuelles.length">
+            <span class="etiquette-mois">{{ item.mois }}</span>
+            <div class="barres">
+              <div class="barre barre-cotisations" [style.height.%]="(item.cotisationsCollectees / (statistiques().cotisationsCollectees + statistiques().montantVersementsEffectues + 1)) * 100"></div>
+              <div class="barre barre-versements" [style.height.%]="(item.versementsEffectues / (statistiques().cotisationsCollectees + statistiques().montantVersementsEffectues + 1)) * 100"></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="legende">
+        <span class="legende-item">
+          <span class="barre-cotisations"></span>
+          Cotisations collectées
+        </span>
+        <span class="legende-item">
+          <span class="barre-versements"></span>
+          Versements effectués
+        </span>
+      </div>
+    </article>
+  </section>
+
+  <!-- Configuration -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Configuration de la tontine</h2>
+      <p class="description">Modifier les règles de la tontine. Ces valeurs alimentent les cotisations et les tours.</p>
+
+      <form class="formulaire" (ngSubmit)="sauvegarderConfiguration()">
+        <div class="champ">
+          <label for="nom">Nom de la tontine</label>
+          <input id="nom" type="text" [(ngModel)]="configuration().nom" name="nom" required />
+        </div>
+
+        <div class="champ">
+          <label for="montant">Montant de la cotisation (FCFA)</label>
+          <input id="montant" type="number" [(ngModel)]="configuration().montantCotisation" name="montant" min="1" required />
+        </div>
+
+        <div class="champ">
+          <label for="frequence">Fréquence</label>
+          <select id="frequence" [(ngModel)]="configuration().frequence" name="frequence" required>
+            <option value="MENSUELLE">Mensuelle</option>
+            <option value="HEBDOMADAIRE">Hebdomadaire</option>
+          </select>
+        </div>
+
+        <div class="champ">
+          <label for="jour">Jour d'échéance</label>
+          <input id="jour" type="number" [(ngModel)]="configuration().jourEcheance" name="jour" min="1" max="31" required />
+        </div>
+
+        <div class="champ">
+          <label for="ordre">Ordre des tours</label>
+          <select id="ordre" [(ngModel)]="configuration().ordreTours" name="ordre" required>
+            <option value="ALEATOIRE">Tirage au sort</option>
+            <option value="MANUEL">Ordre manuel</option>
+          </select>
+        </div>
+
+        <div class="boutons">
+          <button type="submit" class="bouton bouton--primaire">Enregistrer</button>
+          <a class="bouton bouton--secondaire" routerLink="/espace/administration">
+            Retour à l'administration
+          </a>
+        </div>
+      </form>
+    </article>
+  </section>
+
+  <!-- Rapports -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Rapports</h2>
+      <p class="description">Exporter les statistiques au format CSV pour archivage ou analyse externe.</p>
+
+      <div class="boutons">
+        <button class="bouton bouton--secondaire" (click)="exporterCSV()">
+          📥 Exporter CSV
+        </button>
+      </div>
+    </article>
+  </section>
+
+  <!-- Gestion des comptes -->
+  <section class="cartes">
+    <article class="carte">
+      <h2>Gestion des comptes</h2>
+      <p class="description">Accéder à la gestion complète des comptes, rôles et états d'activation.</p>
+
+      <div class="boutons">
+        <a class="bouton bouton--primaire" routerLink="/espace/administration">
+          ↗ Gérer les comptes
+        </a>
+        <a class="bouton bouton--secondaire" routerLink="/espace/administration/parametres">
+          ⚙ Paramètres
+        </a>
+      </div>
+    </article>
+  </section>
+</section>

@@ -5,6 +5,13 @@
   color: var(--couleur-texte-doux);
 }
 
+.accueil__role__sous {
+  color: var(--couleur-texte-doux);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin-bottom: var(--espace-3);
+}
+
 .grille {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -22,6 +29,13 @@
   color: var(--couleur-texte-doux);
   margin: 0;
   flex: 1;
+}
+
+.module__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: var(--espace-2);
 }
 
 .module__etat {
