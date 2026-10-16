@@ -31,7 +31,7 @@
 
 - [x] 6.1 Construire `administration.html`/`.ts`/`.css` : formulaire de création (nom, e-mail, rôle parmi `TRESORIER`/`MEMBRE`, mot de passe avec bascule de visibilité), tableau des comptes (nom, e-mail, rôle, état, date de création) et messages d'erreur — vérifier que l'écran compile et affiche la liste réelle des comptes
 - [x] 6.2 Ajouter les actions par ligne : modifier (nom/rôle), activer/désactiver, réinitialiser le mot de passe, « Se connecter en tant que » — vérifier manuellement chaque action contre un compte de test (création, édition, bascule, retour)
-- [ ] 6.3 Vérifier visuellement l'écran avec la palette existante (`npm start` puis parcours : admin → Administration → créer/modifier/désactiver un compte)
+- [x] 6.3 Vérifier visuellement l'écran avec la palette existante (`npm start` puis parcours : admin → Administration → créer/modifier/désactiver un compte)
 
 ## 7. Écran « changer mon mot de passe »
 
