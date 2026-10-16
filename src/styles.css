@@ -197,6 +197,45 @@ a:hover {
   font-size: 0.85rem;
 }
 
+/* Champ mot de passe avec bascule de visibilité ----------------------- */
+
+.champ-mot-de-passe {
+  position: relative;
+}
+
+.champ-mot-de-passe input {
+  padding-right: 3rem;
+}
+
+.champ-mot-de-passe .bascule-visibilite {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  padding: 0;
+  border: none;
+  border-radius: var(--rayon-petit);
+  background-color: transparent;
+  color: var(--couleur-texte-doux);
+  cursor: pointer;
+  transition: color var(--transition), background-color var(--transition);
+}
+
+.champ-mot-de-passe .bascule-visibilite:hover {
+  color: var(--couleur-primaire-fonce);
+  background-color: var(--couleur-primaire-doux);
+}
+
+.champ-mot-de-passe .bascule-visibilite svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 /* Cartes et messages -------------------------------------------------- */
 
 .carte {

@@ -17,11 +17,16 @@ export class Inscription {
   readonly longueurMin = LONGUEUR_MIN_MOT_DE_PASSE;
   readonly messageErreur = signal<string | null>(null);
   readonly enCours = signal(false);
+  readonly motDePasseVisible = signal(false);
   readonly formulaire = this.fb.nonNullable.group({
     nomComplet: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     motDePasse: ['', [Validators.required, Validators.minLength(LONGUEUR_MIN_MOT_DE_PASSE)]],
   });
+
+  basculerVisibiliteMotDePasse(): void {
+    this.motDePasseVisible.update((visible) => !visible);
+  }
 
   async valider(): Promise<void> {
     if (this.formulaire.invalid) {

@@ -46,15 +46,56 @@
 
       <div class="champ">
         <label for="motDePasse">Mot de passe</label>
-        <input
-          id="motDePasse"
-          type="password"
-          formControlName="motDePasse"
-          autocomplete="new-password"
-          [class.est-invalide]="
-            formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.invalid
-          "
-        />
+        <div class="champ-mot-de-passe">
+          <input
+            id="motDePasse"
+            [type]="motDePasseVisible() ? 'text' : 'password'"
+            formControlName="motDePasse"
+            autocomplete="new-password"
+            [class.est-invalide]="
+              formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.invalid
+            "
+          />
+          <button
+            type="button"
+            class="bascule-visibilite"
+            [attr.aria-pressed]="motDePasseVisible()"
+            [attr.aria-label]="
+              motDePasseVisible() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
+            "
+            (click)="basculerVisibiliteMotDePasse()"
+          >
+            @if (motDePasseVisible()) {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.8 19.8 0 0 1 5.06-5.94" />
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a19.8 19.8 0 0 1-2.16 3.19" />
+                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            } @else {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            }
+          </button>
+        </div>
         @if (formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.hasError('required')) {
           <span class="message-erreur">Le mot de passe est obligatoire.</span>
         }

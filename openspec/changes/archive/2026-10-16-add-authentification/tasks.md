@@ -35,6 +35,7 @@
 - [x] 6.3 Déclarer les routes dans `src/app/app.routes.ts` (`/connexion` et `/inscription` sous `guestGuard`, espace applicatif sous `authGuard` + layout) avec redirection par défaut — vérifier en naviguant : visiteur redirigé vers `/connexion`, connecté vers l'espace applicatif
 - [x] 6.4 Ajouter un écran « Accès refusé » pour les routes soumises à `roleGuard` — vérifier qu'un rôle non autorisé l'affiche au lieu du contenu protégé
 - [x] 6.5 Relier le bouton de déconnexion de l'en-tête à `logout()` — vérifier manuellement l'effacement de la session et le retour à `/connexion`
+- [x] 6.6 Ajouter une bascule « afficher/masquer » (icône œil) sur les champs mot de passe de la connexion et de l'inscription — vérifier par tests que le champ change de type `password`/`text` et que le bouton porte l'état `aria-pressed`
 
 ## 7. Vérification d'intégration
 

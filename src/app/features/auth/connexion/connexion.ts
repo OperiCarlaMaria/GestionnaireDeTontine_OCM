@@ -17,10 +17,15 @@ export class Connexion {
 
   readonly messageErreur = signal<string | null>(null);
   readonly enCours = signal(false);
+  readonly motDePasseVisible = signal(false);
   readonly formulaire = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     motDePasse: ['', [Validators.required]],
   });
+
+  basculerVisibiliteMotDePasse(): void {
+    this.motDePasseVisible.update((visible) => !visible);
+  }
 
   async valider(): Promise<void> {
     if (this.formulaire.invalid) {

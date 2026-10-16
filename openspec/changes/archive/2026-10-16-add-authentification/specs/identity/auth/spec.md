@@ -31,12 +31,21 @@ Le système SHALL valider les données saisies avant de créer un compte : nom c
 
 ### Requirement: Stockage sécurisé des mots de passe
 
-Le système SHALL stocker les mots de passe uniquement sous forme de condensat protégé par un sel aléatoire unique par compte, calculé avec un algorithme de dérivation de clé résistant aux attaques par force brute. Le mot de passe en clair ne doit jamais être enregistré ni affiché.
+Le système SHALL stocker les mots de passe uniquement sous forme de condensat protégé par un sel aléatoire unique par compte, calculé avec un algorithme de dérivation de clé résistant aux attaques par force brute. Le mot de passe en clair ne doit jamais être enregistré, ni restitué en clair après stockage.
 
 #### Scenario: Mot de passe jamais persisté en clair
 
 - **WHEN** un compte est créé ou lu depuis le stockage local
 - **THEN** aucune donnée persistée ne contient le mot de passe en clair et chaque compte possède un sel distinct
+
+### Requirement: Visibilité du mot de passe saisi
+
+Le système SHALL présenter chaque champ mot de passe masqué par défaut et SHALL permettre à l'utilisateur de basculer sa visibilité pour vérifier le texte qu'il est en train de saisir.
+
+#### Scenario: Bascule afficher/masquer
+
+- **WHEN** un utilisateur active la bascule de visibilité d'un champ mot de passe
+- **THEN** le champ affiche le texte saisi en clair et la bascule signale son état actif ; une nouvelle activation remasque le contenu
 
 ### Requirement: Connexion
 
