@@ -12,6 +12,7 @@ function creerUtilisateur(surcharge: Partial<User> = {}): User {
     salt: 'sel',
     passwordHash: 'hash',
     dateCreation: new Date().toISOString(),
+    actif: true,
     ...surcharge,
   };
 }
@@ -57,5 +58,39 @@ describe('UserService', () => {
     service.ajouter(creerUtilisateur({ email: 'unique@example.com' }));
 
     expect(service.trouverParEmail('unique@example.com')).toBeDefined();
+  });
+
+  it('considère comme actifs les comptes créés avant l’ajout du champ', () => {
+    localStorage.setItem(
+      'tontine.utilisateurs',
+      JSON.stringify([
+        {
+          id: 'ancien',
+          nomComplet: 'Ancien Membre',
+          email: 'ancien@example.com',
+          role: 'MEMBRE',
+          salt: 'sel',
+          passwordHash: 'hash',
+          dateCreation: '2026-01-01T00:00:00.000Z',
+        },
+      ]),
+    );
+
+    expect(service.lister()[0].actif).toBe(true);
+  });
+
+  it('persiste les modifications via mettreAJour', () => {
+    service.ajouter(creerUtilisateur());
+    const compte = service.trouverParId('id-1')!;
+
+    const resultat = service.mettreAJour({ ...compte, nomComplet: 'Awa Traoré', actif: false });
+
+    expect(resultat).toBe(true);
+    expect(service.trouverParId('id-1')?.nomComplet).toBe('Awa Traoré');
+    expect(service.trouverParId('id-1')?.actif).toBe(false);
+  });
+
+  it('mettreAJour retourne false pour un identifiant inconnu', () => {
+    expect(service.mettreAJour(creerUtilisateur({ id: 'inconnu' }))).toBe(false);
   });
 });

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.changement-mdp {
+  display: flex;
+  justify-content: center;
+}
+
+.carte--etroite {
+  width: 100%;
+  max-width: 480px;
+}
+
+.aide {
+  color: var(--couleur-texte-doux);
+}
+
+.boutons {
+  display: flex;
+  gap: var(--espace-3);
+  flex-wrap: wrap;
+  margin-top: var(--espace-4);
+}
+
+.boutons a.bouton:hover {
+  text-decoration: none;
+}

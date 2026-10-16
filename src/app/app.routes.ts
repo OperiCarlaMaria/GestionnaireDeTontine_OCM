@@ -32,6 +32,24 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/espace/administration/administration').then((m) => m.Administration),
       },
+      {
+        path: 'tresorerie',
+        canActivate: [roleGuard('ADMIN', 'TRESORIER')],
+        loadComponent: () =>
+          import('./features/espace/tresorerie/tresorerie').then((m) => m.Tresorerie),
+      },
+      {
+        path: 'mon-espace',
+        loadComponent: () =>
+          import('./features/espace/mon-espace/mon-espace').then((m) => m.MonEspace),
+      },
+      {
+        path: 'changer-mot-de-passe',
+        loadComponent: () =>
+          import('./features/espace/changer-mot-de-passe/changer-mot-de-passe').then(
+            (m) => m.ChangerMotDePasse,
+          ),
+      },
     ],
   },
   {

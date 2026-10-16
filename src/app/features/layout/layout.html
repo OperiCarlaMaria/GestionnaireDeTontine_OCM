@@ -11,16 +11,41 @@
         @if (membre.role === 'ADMIN') {
           <a routerLink="/espace/administration" routerLinkActive="est-actif">Administration</a>
         }
+        @if (membre.role === 'ADMIN' || membre.role === 'TRESORIER') {
+          <a routerLink="/espace/tresorerie" routerLinkActive="est-actif">Trésorerie</a>
+        }
+        <a routerLink="/espace/mon-espace" routerLinkActive="est-actif">Mon espace</a>
       </nav>
 
       <div class="compte">
         <span class="compte__nom">{{ membre.nomComplet }}</span>
         <span class="badge badge--{{ membre.role.toLowerCase() }}">{{ libelleRole(membre.role) }}</span>
+        <a
+          class="compte__lien"
+          routerLink="/espace/changer-mot-de-passe"
+          routerLinkActive="est-actif"
+        >
+          Changer mon mot de passe
+        </a>
         <button type="button" class="bouton bouton--secondaire" (click)="seDeconnecter()">
           Déconnexion
         </button>
       </div>
     </header>
+
+    @if (enBascule()) {
+      <div class="bandeau-bascule" role="status">
+        <span>
+          Vous consultez le compte de {{ membre.nomComplet }}
+          <span class="badge badge--{{ membre.role.toLowerCase() }}">
+            {{ libelleRole(membre.role) }}
+          </span>
+        </span>
+        <button type="button" class="bouton bouton--secondaire" (click)="revenirASonCompte()">
+          Revenir à mon compte
+        </button>
+      </div>
+    }
 
     <main class="contenu">
       <router-outlet />

@@ -6,7 +6,7 @@
 
 Le système SHALL permettre à un visiteur de créer un compte en fournissant un nom complet, une adresse e-mail et un mot de passe, uniquement tant qu'aucun compte n'existe. Cette inscription initiale crée le premier administrateur ; une fois qu'un compte existe, l'inscription publique est fermée.
 
-#### Scenario: Inscription initiale réussie
+#### Scenario: Inscription réussie
 
 - **WHEN** un visiteur soumet le formulaire d'inscription alors qu'aucun compte n'existe, avec un nom, un e-mail unique et un mot de passe valide
 - **THEN** le système crée le premier compte avec le rôle `ADMIN`, ouvre une session et redirige l'utilisateur vers l'espace applicatif
@@ -49,7 +49,7 @@ Le système SHALL associer à chaque compte un rôle parmi `ADMIN`, `TRESORIER` 
 - **WHEN** le tout premier compte de l'application est créé
 - **THEN** ce compte reçoit le rôle `ADMIN`
 
-#### Scenario: Comptes créés par l'administrateur
+#### Scenario: Comptes suivants
 
 - **WHEN** un administrateur crée un compte en choisissant un rôle
 - **THEN** ce compte reçoit le rôle choisi par l'administrateur

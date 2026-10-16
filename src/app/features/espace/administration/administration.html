@@ -1,7 +1,283 @@
-<section class="carte">
-  <h1>Administration</h1>
-  <p>
-    Cet espace est réservé aux administrateurs de la tontine. La gestion des membres et des
-    paramètres y sera ajoutée dans les prochains modules.
-  </p>
+<section class="administration">
+  <header class="entete-section">
+    <h1>Administration</h1>
+    <p>Gérez les comptes de la tontine : création, rôles, activation et mots de passe.</p>
+  </header>
+
+  @if (messageErreur(); as erreur) {
+    <p class="message message--erreur" role="alert">{{ erreur }}</p>
+  }
+  @if (messageSucces(); as succes) {
+    <p class="message message--succes" role="status">{{ succes }}</p>
+  }
+
+  <section class="carte bloc" aria-labelledby="titre-creation">
+    <h2 id="titre-creation">Créer un compte</h2>
+    <form [formGroup]="formulaireCreation" (ngSubmit)="creerCompte()" novalidate>
+      <div class="grille-creation">
+        <div class="champ">
+          <label for="creation-nom">Nom complet</label>
+          <input
+            id="creation-nom"
+            type="text"
+            formControlName="nomComplet"
+            autocomplete="name"
+            [class.est-invalide]="
+              formulaireCreation.controls.nomComplet.touched &&
+              formulaireCreation.controls.nomComplet.invalid
+            "
+          />
+          @if (
+            formulaireCreation.controls.nomComplet.touched &&
+            formulaireCreation.controls.nomComplet.invalid
+          ) {
+            <span class="message-erreur">Le nom complet est obligatoire.</span>
+          }
+        </div>
+
+        <div class="champ">
+          <label for="creation-email">Adresse e-mail</label>
+          <input
+            id="creation-email"
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            [class.est-invalide]="
+              formulaireCreation.controls.email.touched &&
+              formulaireCreation.controls.email.invalid
+            "
+          />
+          @if (
+            formulaireCreation.controls.email.touched &&
+            formulaireCreation.controls.email.hasError('required')
+          ) {
+            <span class="message-erreur">L'adresse e-mail est obligatoire.</span>
+          }
+          @if (
+            formulaireCreation.controls.email.touched &&
+            formulaireCreation.controls.email.hasError('email')
+          ) {
+            <span class="message-erreur">L'adresse e-mail n'est pas valide.</span>
+          }
+        </div>
+
+        <div class="champ">
+          <label for="creation-role">Rôle</label>
+          <select id="creation-role" formControlName="role">
+            @for (role of rolesCreation; track role) {
+              <option [value]="role">{{ libelleRole(role) }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="champ">
+          <label for="creation-mot-de-passe">Mot de passe</label>
+          <div class="champ-mot-de-passe">
+            <input
+              id="creation-mot-de-passe"
+              [type]="motDePasseVisible() ? 'text' : 'password'"
+              formControlName="motDePasse"
+              autocomplete="new-password"
+              [class.est-invalide]="
+                formulaireCreation.controls.motDePasse.touched &&
+                formulaireCreation.controls.motDePasse.invalid
+              "
+            />
+            <button
+              type="button"
+              class="bascule-visibilite"
+              [attr.aria-pressed]="motDePasseVisible()"
+              [attr.aria-label]="
+                motDePasseVisible() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'
+              "
+              (click)="basculerVisibiliteMotDePasse()"
+            >
+              @if (motDePasseVisible()) {
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.8 19.8 0 0 1 5.06-5.94"
+                  />
+                  <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a19.8 19.8 0 0 1-2.16 3.19" />
+                  <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              } @else {
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              }
+            </button>
+          </div>
+          @if (
+            formulaireCreation.controls.motDePasse.touched &&
+            formulaireCreation.controls.motDePasse.hasError('required')
+          ) {
+            <span class="message-erreur">Le mot de passe est obligatoire.</span>
+          }
+          @if (
+            formulaireCreation.controls.motDePasse.touched &&
+            formulaireCreation.controls.motDePasse.hasError('minlength')
+          ) {
+            <span class="message-erreur">
+              Le mot de passe doit contenir au moins {{ longueurMin }} caractères.
+            </span>
+          }
+        </div>
+      </div>
+
+      <button type="submit" class="bouton bouton--primaire" [disabled]="enCours()">
+        {{ enCours() ? 'Création…' : 'Créer le compte' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="carte bloc" aria-labelledby="titre-comptes">
+    <h2 id="titre-comptes">Comptes ({{ comptes().length }})</h2>
+    <ul class="liste-comptes">
+      @for (compte of comptes(); track compte.id) {
+        <li class="ligne-compte">
+          @if (compteEnEdition() === compte.id) {
+            <div class="formulaire-ligne" [formGroup]="formulaireEdition">
+              <div class="champ champ--ligne">
+                <label [for]="'edition-nom-' + compte.id">Nom complet</label>
+                <input
+                  [id]="'edition-nom-' + compte.id"
+                  type="text"
+                  formControlName="nomComplet"
+                  autocomplete="name"
+                />
+              </div>
+              <div class="champ champ--ligne">
+                <label [for]="'edition-role-' + compte.id">Rôle</label>
+                <select [id]="'edition-role-' + compte.id" formControlName="role">
+                  @for (role of roles; track role) {
+                    <option [value]="role">{{ libelleRole(role) }}</option>
+                  }
+                </select>
+                @if (estMoi(compte)) {
+                  <span class="aide">Le rôle de votre propre compte ne peut pas être modifié.</span>
+                }
+              </div>
+              <div class="boutons-ligne">
+                <button type="button" class="bouton bouton--primaire" (click)="enregistrerEdition(compte.id)">
+                  Enregistrer
+                </button>
+                <button type="button" class="bouton bouton--secondaire" (click)="annulerEdition()">
+                  Annuler
+                </button>
+              </div>
+            </div>
+          } @else if (compteAReinitialiser() === compte.id) {
+            <div class="formulaire-ligne" [formGroup]="formulaireReinitialisation">
+              <div class="champ champ--ligne">
+                <label [for]="'reinit-mdp-' + compte.id">Nouveau mot de passe</label>
+                <input
+                  [id]="'reinit-mdp-' + compte.id"
+                  type="password"
+                  formControlName="motDePasse"
+                  autocomplete="new-password"
+                />
+                @if (
+                  formulaireReinitialisation.controls.motDePasse.touched &&
+                  formulaireReinitialisation.controls.motDePasse.hasError('required')
+                ) {
+                  <span class="message-erreur">Le nouveau mot de passe est obligatoire.</span>
+                }
+                @if (
+                  formulaireReinitialisation.controls.motDePasse.touched &&
+                  formulaireReinitialisation.controls.motDePasse.hasError('minlength')
+                ) {
+                  <span class="message-erreur">
+                    Le mot de passe doit contenir au moins {{ longueurMin }} caractères.
+                  </span>
+                }
+              </div>
+              <div class="boutons-ligne">
+                <button
+                  type="button"
+                  class="bouton bouton--primaire"
+                  [disabled]="enCours()"
+                  (click)="reinitialiserMotDePasse(compte.id)"
+                >
+                  Réinitialiser
+                </button>
+                <button type="button" class="bouton bouton--secondaire" (click)="annulerReinitialisation()">
+                  Annuler
+                </button>
+              </div>
+            </div>
+          } @else {
+            <div class="identite">
+              <span class="identite__nom">
+                {{ compte.nomComplet }}
+                @if (estMoi(compte)) {
+                  <span class="aide">(vous)</span>
+                }
+              </span>
+              <span class="identite__email">{{ compte.email }}</span>
+            </div>
+
+            <div class="meta">
+              <span class="badge badge--{{ compte.role.toLowerCase() }}">
+                {{ libelleRole(compte.role) }}
+              </span>
+              <span
+                class="etat"
+                [class.etat--actif]="compte.actif"
+                [class.etat--desactive]="!compte.actif"
+              >
+                {{ compte.actif ? 'Actif' : 'Désactivé' }}
+              </span>
+              <span class="date">Créé le {{ compte.dateCreation | date: 'dd/MM/yyyy' }}</span>
+            </div>
+
+            <div class="actions">
+              <button type="button" class="action" (click)="commencerEdition(compte)">
+                Modifier
+              </button>
+              @if (!estMoi(compte)) {
+                <button
+                  type="button"
+                  class="action"
+                  [class.action--danger]="compte.actif"
+                  (click)="changerEtat(compte)"
+                >
+                  {{ compte.actif ? 'Désactiver' : 'Réactiver' }}
+                </button>
+              }
+              <button type="button" class="action" (click)="commencerReinitialisation(compte.id)">
+                Mot de passe
+              </button>
+              @if (!estMoi(compte) && compte.actif) {
+                <button type="button" class="action" (click)="seConnecterEnTantQue(compte)">
+                  Se connecter en tant que
+                </button>
+              }
+            </div>
+          }
+        </li>
+      } @empty {
+        <li class="liste-vide">Aucun compte pour le moment.</li>
+      }
+    </ul>
+  </section>
 </section>
+
+

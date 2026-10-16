@@ -88,6 +88,37 @@
   font-weight: 600;
 }
 
+.compte__lien {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--couleur-texte-doux);
+}
+
+.compte__lien:hover,
+.compte__lien.est-actif {
+  color: var(--couleur-primaire-fonce);
+  text-decoration: none;
+}
+
+.bandeau-bascule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-4);
+  flex-wrap: wrap;
+  padding: var(--espace-3) var(--espace-5);
+  background-color: var(--couleur-primaire-doux);
+  border-bottom: 1px solid var(--couleur-rose-fonce);
+  color: var(--couleur-ardoise);
+  font-weight: 600;
+}
+
+.bandeau-bascule span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espace-2);
+}
+
 .contenu {
   flex: 1;
   width: 100%;

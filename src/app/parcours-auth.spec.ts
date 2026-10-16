@@ -66,17 +66,21 @@ describe('Parcours d’authentification (intégration)', () => {
     expect(harnais.routeNativeElement?.textContent).toContain('Bonjour, Awa Diop');
   });
 
-  it('second compte MEMBRE : accès refusé à l’administration', async () => {
+  it('compte MEMBRE créé par l’administrateur : accès refusé à l’administration', async () => {
     await auth.register({
       nomComplet: 'Awa Diop',
       email: 'awa@example.com',
       motDePasse: 'motdepasse123',
     });
-    await auth.register({
+    const creation = await auth.creerCompte({
       nomComplet: 'Moussa Fall',
       email: 'moussa@example.com',
+      role: 'MEMBRE',
       motDePasse: 'motdepasse456',
     });
+    expect(creation.succes).toBe(true);
+    auth.logout();
+    await auth.login({ email: 'moussa@example.com', motDePasse: 'motdepasse456' });
     const harnais = await RouterTestingHarness.create();
 
     await harnais.navigateByUrl('/espace/administration');
@@ -84,5 +88,59 @@ describe('Parcours d’authentification (intégration)', () => {
     expect(auth.role()).toBe('MEMBRE');
     expect(router.url).toBe('/acces-refuse');
     expect(harnais.routeDebugElement?.componentInstance).toBeInstanceOf(AccesRefuse);
+  });
+
+  it('inscription fermée pour un visiteur après le premier compte', async () => {
+    await auth.register({
+      nomComplet: 'Awa Diop',
+      email: 'awa@example.com',
+      motDePasse: 'motdepasse123',
+    });
+    auth.logout();
+
+    const resultat = await auth.register({
+      nomComplet: 'Intrus',
+      email: 'intrus@example.com',
+      motDePasse: 'motdepasse456',
+    });
+
+    expect(resultat).toEqual({ succes: false, message: "L'inscription publique est fermée." });
+  });
+
+  it('espaces par rôle : membre vers mon-espace mais refus en trésorerie, trésorier accepté', async () => {
+    await auth.register({
+      nomComplet: 'Awa Diop',
+      email: 'awa@example.com',
+      motDePasse: 'motdepasse123',
+    });
+    await auth.creerCompte({
+      nomComplet: 'Moussa Fall',
+      email: 'moussa@example.com',
+      role: 'MEMBRE',
+      motDePasse: 'motdepasse456',
+    });
+    await auth.creerCompte({
+      nomComplet: 'Karim Ba',
+      email: 'karim@example.com',
+      role: 'TRESORIER',
+      motDePasse: 'motdepasse789',
+    });
+    auth.logout();
+    const harnais = await RouterTestingHarness.create();
+
+    await auth.login({ email: 'moussa@example.com', motDePasse: 'motdepasse456' });
+    await harnais.navigateByUrl('/espace/mon-espace');
+    expect(router.url).toBe('/espace/mon-espace');
+    await harnais.navigateByUrl('/espace/tresorerie');
+    expect(router.url).toBe('/acces-refuse');
+    await harnais.navigateByUrl('/espace/administration');
+    expect(router.url).toBe('/acces-refuse');
+
+    auth.logout();
+    await auth.login({ email: 'karim@example.com', motDePasse: 'motdepasse789' });
+    await harnais.navigateByUrl('/espace/tresorerie');
+    expect(router.url).toBe('/espace/tresorerie');
+    await harnais.navigateByUrl('/espace/administration');
+    expect(router.url).toBe('/acces-refuse');
   });
 });

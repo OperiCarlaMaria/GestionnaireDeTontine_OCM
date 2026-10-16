@@ -1,0 +1,163 @@
+<section class="changement-mdp">
+  <div class="carte carte--etroite">
+    <h1>Changer mon mot de passe</h1>
+    <p class="aide">
+      Saisissez votre mot de passe actuel puis un nouveau mot de passe ({{ longueurMin }}
+      caractères minimum).
+    </p>
+
+    @if (messageErreur(); as erreur) {
+      <p class="message message--erreur" role="alert">{{ erreur }}</p>
+    }
+    @if (messageSucces(); as succes) {
+      <p class="message message--succes" role="status">{{ succes }}</p>
+    }
+
+    <form [formGroup]="formulaire" (ngSubmit)="valider()" novalidate>
+      <div class="champ">
+        <label for="motDePasseActuel">Mot de passe actuel</label>
+        <div class="champ-mot-de-passe">
+          <input
+            id="motDePasseActuel"
+            [type]="actuelVisible() ? 'text' : 'password'"
+            formControlName="motDePasseActuel"
+            autocomplete="current-password"
+            [class.est-invalide]="
+              formulaire.controls.motDePasseActuel.touched &&
+              formulaire.controls.motDePasseActuel.invalid
+            "
+          />
+          <button
+            type="button"
+            class="bascule-visibilite"
+            [attr.aria-pressed]="actuelVisible()"
+            [attr.aria-label]="
+              actuelVisible()
+                ? 'Masquer le mot de passe actuel'
+                : 'Afficher le mot de passe actuel'
+            "
+            (click)="basculerActuel()"
+          >
+            @if (actuelVisible()) {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.8 19.8 0 0 1 5.06-5.94"
+                />
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a19.8 19.8 0 0 1-2.16 3.19" />
+                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            } @else {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            }
+          </button>
+        </div>
+        @if (
+          formulaire.controls.motDePasseActuel.touched &&
+          formulaire.controls.motDePasseActuel.invalid
+        ) {
+          <span class="message-erreur">Le mot de passe actuel est obligatoire.</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="nouveauMotDePasse">Nouveau mot de passe</label>
+        <div class="champ-mot-de-passe">
+          <input
+            id="nouveauMotDePasse"
+            [type]="nouveauVisible() ? 'text' : 'password'"
+            formControlName="nouveauMotDePasse"
+            autocomplete="new-password"
+            [class.est-invalide]="
+              formulaire.controls.nouveauMotDePasse.touched &&
+              formulaire.controls.nouveauMotDePasse.invalid
+            "
+          />
+          <button
+            type="button"
+            class="bascule-visibilite"
+            [attr.aria-pressed]="nouveauVisible()"
+            [attr.aria-label]="
+              nouveauVisible()
+                ? 'Masquer le nouveau mot de passe'
+                : 'Afficher le nouveau mot de passe'
+            "
+            (click)="basculerNouveau()"
+          >
+            @if (nouveauVisible()) {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a19.8 19.8 0 0 1 5.06-5.94"
+                />
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a19.8 19.8 0 0 1-2.16 3.19" />
+                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+            } @else {
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            }
+          </button>
+        </div>
+        @if (
+          formulaire.controls.nouveauMotDePasse.touched &&
+          formulaire.controls.nouveauMotDePasse.hasError('required')
+        ) {
+          <span class="message-erreur">Le nouveau mot de passe est obligatoire.</span>
+        }
+        @if (
+          formulaire.controls.nouveauMotDePasse.touched &&
+          formulaire.controls.nouveauMotDePasse.hasError('minlength')
+        ) {
+          <span class="message-erreur">
+            Le mot de passe doit contenir au moins {{ longueurMin }} caractères.
+          </span>
+        }
+      </div>
+
+      <div class="boutons">
+        <button type="submit" class="bouton bouton--primaire" [disabled]="enCours()">
+          {{ enCours() ? 'Enregistrement…' : 'Changer le mot de passe' }}
+        </button>
+        <a class="bouton bouton--secondaire" routerLink="/espace">Retour à l'espace</a>
+      </div>
+    </form>
+  </div>
+</section>
