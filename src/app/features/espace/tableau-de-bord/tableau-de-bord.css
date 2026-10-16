@@ -1,0 +1,36 @@
+.accueil__role {
+  display: flex;
+  align-items: center;
+  gap: var(--espace-2);
+  color: var(--couleur-texte-doux);
+}
+
+.grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--espace-4);
+  margin-top: var(--espace-4);
+}
+
+.module {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+}
+
+.module p {
+  color: var(--couleur-texte-doux);
+  margin: 0;
+  flex: 1;
+}
+
+.module__etat {
+  align-self: flex-start;
+  padding: 0.15rem 0.6rem;
+  border-radius: var(--rayon-grand);
+  background-color: rgba(169, 183, 198, 0.3);
+  color: var(--couleur-ardoise);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}

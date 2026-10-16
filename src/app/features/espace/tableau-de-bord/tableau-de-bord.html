@@ -1,0 +1,20 @@
+@if (utilisateur(); as membre) {
+  <section class="accueil">
+    <h1>Bonjour, {{ membre.nomComplet }} 👋</h1>
+    <p class="accueil__role">
+      Vous êtes connecté en tant que
+      <span class="badge badge--{{ membre.role.toLowerCase() }}">{{ libelleRole(membre.role) }}</span>
+    </p>
+
+    <h2>Modules de gestion</h2>
+    <div class="grille">
+      @for (module of modules; track module.titre) {
+        <article class="carte module">
+          <h3>{{ module.titre }}</h3>
+          <p>{{ module.description }}</p>
+          <span class="module__etat">Bientôt disponible</span>
+        </article>
+      }
+    </div>
+  </section>
+}

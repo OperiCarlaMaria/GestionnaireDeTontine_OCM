@@ -1,0 +1,77 @@
+<div class="ecran-auth">
+  <section class="carte-auth" aria-labelledby="titre-inscription">
+    <header class="entete-auth">
+      <div class="pastille-auth" aria-hidden="true">T</div>
+      <h1 id="titre-inscription">Créer un compte</h1>
+      <p>Rejoignez la gestion de votre tontine.</p>
+    </header>
+
+    @if (messageErreur(); as erreur) {
+      <p class="message message--erreur" role="alert">{{ erreur }}</p>
+    }
+
+    <form [formGroup]="formulaire" (ngSubmit)="valider()" novalidate>
+      <div class="champ">
+        <label for="nomComplet">Nom complet</label>
+        <input
+          id="nomComplet"
+          type="text"
+          formControlName="nomComplet"
+          autocomplete="name"
+          [class.est-invalide]="
+            formulaire.controls.nomComplet.touched && formulaire.controls.nomComplet.invalid
+          "
+        />
+        @if (formulaire.controls.nomComplet.touched && formulaire.controls.nomComplet.invalid) {
+          <span class="message-erreur">Le nom complet est obligatoire.</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          [class.est-invalide]="formulaire.controls.email.touched && formulaire.controls.email.invalid"
+        />
+        @if (formulaire.controls.email.touched && formulaire.controls.email.hasError('required')) {
+          <span class="message-erreur">L'adresse e-mail est obligatoire.</span>
+        }
+        @if (formulaire.controls.email.touched && formulaire.controls.email.hasError('email')) {
+          <span class="message-erreur">L'adresse e-mail n'est pas valide.</span>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="motDePasse">Mot de passe</label>
+        <input
+          id="motDePasse"
+          type="password"
+          formControlName="motDePasse"
+          autocomplete="new-password"
+          [class.est-invalide]="
+            formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.invalid
+          "
+        />
+        @if (formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.hasError('required')) {
+          <span class="message-erreur">Le mot de passe est obligatoire.</span>
+        }
+        @if (formulaire.controls.motDePasse.touched && formulaire.controls.motDePasse.hasError('minlength')) {
+          <span class="message-erreur">
+            Le mot de passe doit contenir au moins {{ longueurMin }} caractères.
+          </span>
+        }
+      </div>
+
+      <button type="submit" class="bouton bouton--primaire bouton--bloc" [disabled]="enCours()">
+        {{ enCours() ? 'Création…' : "S'inscrire" }}
+      </button>
+    </form>
+
+    <p class="pied-auth">
+      Déjà un compte ? <a routerLink="/connexion">Se connecter</a>
+    </p>
+  </section>
+</div>

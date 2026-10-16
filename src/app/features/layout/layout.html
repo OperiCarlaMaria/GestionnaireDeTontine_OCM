@@ -1,0 +1,29 @@
+@if (utilisateur(); as membre) {
+  <div class="coquille">
+    <header class="entete">
+      <a class="marque" routerLink="/espace">
+        <span class="marque__pastille" aria-hidden="true">T</span>
+        <span class="marque__nom">Tontine</span>
+      </a>
+
+      <nav class="navigation" aria-label="Navigation principale">
+        <a routerLink="/espace/tableau-de-bord" routerLinkActive="est-actif">Tableau de bord</a>
+        @if (membre.role === 'ADMIN') {
+          <a routerLink="/espace/administration" routerLinkActive="est-actif">Administration</a>
+        }
+      </nav>
+
+      <div class="compte">
+        <span class="compte__nom">{{ membre.nomComplet }}</span>
+        <span class="badge badge--{{ membre.role.toLowerCase() }}">{{ libelleRole(membre.role) }}</span>
+        <button type="button" class="bouton bouton--secondaire" (click)="seDeconnecter()">
+          Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <main class="contenu">
+      <router-outlet />
+    </main>
+  </div>
+}

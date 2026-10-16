@@ -1,0 +1,14 @@
+<div class="ecran-refus">
+  <section class="carte refus" aria-labelledby="titre-refus">
+    <div class="refus__icone" aria-hidden="true">🔒</div>
+    <h1 id="titre-refus">Accès refusé</h1>
+    <p>Votre rôle ne vous permet pas d'accéder à cette page.</p>
+    <div class="refus__actions">
+      @if (estConnecte()) {
+        <a class="bouton bouton--primaire" routerLink="/espace/tableau-de-bord">Retour au tableau de bord</a>
+      } @else {
+        <a class="bouton bouton--primaire" routerLink="/connexion">Se connecter</a>
+      }
+    </div>
+  </section>
+</div>

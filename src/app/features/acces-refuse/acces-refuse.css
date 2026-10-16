@@ -1,0 +1,21 @@
+.ecran-refus {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: var(--espace-5);
+  background-color: var(--couleur-creme);
+}
+
+.refus {
+  width: min(420px, 100%);
+  text-align: center;
+}
+
+.refus__icone {
+  font-size: 2.5rem;
+  margin-bottom: var(--espace-2);
+}
+
+.refus__actions {
+  margin-top: var(--espace-4);
+}

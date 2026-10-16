@@ -1,1 +1,256 @@
-/* You can add global styles to this file, and also import other style files */
+/* Design system de l'application de gestion de tontine.
+   Palette imposée : crème, rose pâle, rose foncé, vert olive, gris-bleu, ardoise. */
+
+:root {
+  --couleur-creme: #fff7e6;
+  --couleur-rose-pale: #f7c8d3;
+  --couleur-rose-fonce: #b46a72;
+  --couleur-olive: #a8b58a;
+  --couleur-gris-bleu: #a9b7c6;
+  --couleur-ardoise: #2d3a47;
+
+  --couleur-fond: var(--couleur-creme);
+  --couleur-surface: #ffffff;
+  --couleur-texte: var(--couleur-ardoise);
+  --couleur-texte-doux: #5f6b78;
+  --couleur-bordure: var(--couleur-gris-bleu);
+  --couleur-primaire: var(--couleur-rose-fonce);
+  --couleur-primaire-fonce: #9c5560;
+  --couleur-primaire-doux: var(--couleur-rose-pale);
+  --couleur-succes: var(--couleur-olive);
+  --couleur-erreur: #b4453f;
+
+  --rayon-petit: 8px;
+  --rayon-moyen: 14px;
+  --rayon-grand: 22px;
+
+  --espace-1: 0.25rem;
+  --espace-2: 0.5rem;
+  --espace-3: 0.75rem;
+  --espace-4: 1rem;
+  --espace-5: 1.5rem;
+  --espace-6: 2rem;
+  --espace-7: 3rem;
+
+  --ombre-douce: 0 10px 30px rgba(45, 58, 71, 0.08);
+  --ombre-moyenne: 0 16px 40px rgba(45, 58, 71, 0.14);
+
+  --transition: 180ms ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100dvh;
+  background-color: var(--couleur-fond);
+  color: var(--couleur-texte);
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--couleur-texte);
+  line-height: 1.2;
+  margin: 0 0 var(--espace-3);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.9rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+p {
+  margin: 0 0 var(--espace-3);
+}
+
+a {
+  color: var(--couleur-primaire-fonce);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--couleur-primaire);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 3px solid var(--couleur-rose-fonce);
+  outline-offset: 2px;
+  border-radius: var(--rayon-petit);
+}
+
+/* Boutons ------------------------------------------------------------- */
+
+.bouton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espace-2);
+  padding: 0.7rem 1.3rem;
+  border: 1px solid transparent;
+  border-radius: var(--rayon-grand);
+  font-size: 0.98rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform var(--transition), background-color var(--transition),
+    box-shadow var(--transition), color var(--transition);
+}
+
+.bouton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.bouton--primaire {
+  background-color: var(--couleur-primaire);
+  color: #ffffff;
+  box-shadow: var(--ombre-douce);
+}
+
+.bouton--primaire:hover:not(:disabled) {
+  background-color: var(--couleur-primaire-fonce);
+  transform: translateY(-2px);
+  box-shadow: var(--ombre-moyenne);
+}
+
+.bouton--secondaire {
+  background-color: transparent;
+  color: var(--couleur-texte);
+  border-color: var(--couleur-bordure);
+}
+
+.bouton--secondaire:hover:not(:disabled) {
+  background-color: var(--couleur-primaire-doux);
+  border-color: var(--couleur-primaire);
+}
+
+.bouton--bloc {
+  width: 100%;
+}
+
+/* Champs de formulaire ------------------------------------------------ */
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espace-2);
+  margin-bottom: var(--espace-4);
+}
+
+.champ > label {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--couleur-texte);
+}
+
+.champ input,
+.champ select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon-petit);
+  background-color: #ffffff;
+  color: var(--couleur-texte);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.champ input:focus,
+.champ select:focus {
+  outline: none;
+  border-color: var(--couleur-primaire);
+  box-shadow: 0 0 0 3px rgba(180, 106, 114, 0.18);
+}
+
+.champ input.est-invalide {
+  border-color: var(--couleur-erreur);
+}
+
+.champ .message-erreur {
+  color: var(--couleur-erreur);
+  font-size: 0.85rem;
+}
+
+/* Cartes et messages -------------------------------------------------- */
+
+.carte {
+  background-color: var(--couleur-surface);
+  border: 1px solid var(--couleur-bordure);
+  border-radius: var(--rayon-moyen);
+  padding: var(--espace-5);
+  box-shadow: var(--ombre-douce);
+}
+
+.message {
+  padding: 0.75rem 1rem;
+  border-radius: var(--rayon-petit);
+  font-size: 0.92rem;
+  margin-bottom: var(--espace-4);
+  border: 1px solid transparent;
+}
+
+.message--erreur {
+  background-color: rgba(180, 69, 63, 0.1);
+  border-color: rgba(180, 69, 63, 0.35);
+  color: var(--couleur-erreur);
+}
+
+.message--succes {
+  background-color: rgba(168, 181, 138, 0.18);
+  border-color: rgba(168, 181, 138, 0.5);
+  color: #4b5733;
+}
+
+/* Badges -------------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--rayon-grand);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.badge--admin {
+  background-color: var(--couleur-primaire-doux);
+  color: var(--couleur-primaire-fonce);
+}
+
+.badge--tresorier {
+  background-color: rgba(168, 181, 138, 0.3);
+  color: #4b5733;
+}
+
+.badge--membre {
+  background-color: rgba(169, 183, 198, 0.3);
+  color: var(--couleur-ardoise);
+}
