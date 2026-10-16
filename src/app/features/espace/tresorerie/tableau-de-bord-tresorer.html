@@ -108,12 +108,12 @@
       <div class="alertes-liste">
         @if (statistiques().cotisationsEnRetard > 0) {
           <div class="alerte">
-            <span class="icone">⚠️</span>
+            <span class="icone">!</span>
             <div><strong>{{ statistiques().cotisationsEnRetard }} cotisation(s) en retard</strong><p>Vérifiez les cotisations des membres.</p></div>
           </div>
         } @else {
           <div class="alerte alerte--ok">
-            <span class="icone">✅</span>
+            <span class="icone">ok</span>
             <div><strong>Aucune alerte</strong><p>Toutes les cotisations sont à jour.</p></div>
           </div>
         }

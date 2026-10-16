@@ -1,5 +1,4 @@
 import { Component, inject, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DecimalPipe } from '@angular/common';
 import { DashboardService } from '../../../core/services/dashboard.service';
@@ -11,7 +10,7 @@ import { libelleRole } from '../../../core/models/role';
 /** Écran de tableau de bord du trésorier. */
 @Component({
   selector: 'app-tableau-de-bord-tresorier',
-  imports: [RouterLink, FormsModule, DecimalPipe],
+  imports: [FormsModule, DecimalPipe],
   templateUrl: './tableau-de-bord-tresorer.html',
   styleUrl: './tableau-de-bord-tresorer.css',
 })

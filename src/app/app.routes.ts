@@ -20,7 +20,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./features/layout/layout').then((m) => m.Layout),
     children: [
-      { path: '', pathMatch: 'full', redirectTo: 'tableau-de-bord-admin' },
+      { path: '', pathMatch: 'full', loadComponent: () => import('./features/espace/tableau-de-bord/redirect/redirect').then((m) => m.TableauDeBordRedirect) },
       {
         path: 'tableau-de-bord-admin',
         canActivate: [roleGuard('ADMIN')],
